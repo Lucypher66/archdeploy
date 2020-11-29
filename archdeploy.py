@@ -1,17 +1,25 @@
 import os
+import sys
+
+sys.argv[0] == 'archdeploy.py'
+sys.argv[1] == 'live'
+
+
+
+
+
 
 def systeminstallation():
    chroot = ""
 
    print("FUNCTION NOT IMPLEMENTED")
    harddrive = input("Type the device path of the hard drive (/dev/sdX): ")
-   hostnamestring = input("Enter the hostname that this device should have later: ")
    mountstring = "mount " + harddrive + " /mnt"
    os.system(mountstring)
-   pacstrapstring = "pacstrap /mnt linux linux-firmware dhcpcd nano bash-completion "
+   pacstrapstring = "pacstrap /mnt linux linux-firmware dhcpcd nano bash-completion python "
 
 
-   option = input("Install the base-devel package? Mandatory if you want to build your oen packages or use the AUR. Y/N: ")
+   option = input("Install the base-devel package? Mandatory if you want to build your own packages or use the AUR. Y/N: ")
    if option == "Y" or option == "y":
        pacstrapstring = pacstrapstring + "base-devel "
    else:
@@ -32,38 +40,38 @@ def systeminstallation():
    os.system(pacstrapstring)
    os.system("genfstab -Up /mnt > /mnt/etc/fstab")
    os.system("cat /mnt/etc/fstab")
+   copystring = "cp " + sys.argv[0] + " /mnt"
+   os.system(copystring)
+   sys.argv[1] == 'chroot'
+   os.system("arch-chroot /mnt python /archdeploy.py chroot")
 
 
-   os.system("arch-chroot /mnt")
-
-   if int(chroot) == 1:
-    hostnamestring = "echo " + hostnamestring + " > /etc/hostname"
-    os.system(hostnamestring)
-    os.system("cat /etc/hostname")
-    packagestring = "pacman -S "
 
 
 
 
 def harddriveformat():
     harddrive = input("Type the device path of the hard drive (/dev/sdX): ")
+    umountstring = "umount " + harddrive + " /mnt"
     formatstring = "mkfs.ext4 " + harddrive
-    option = input("Is this the correct path? " + harddrive + " Y/N ")
+    option = input("Is this the correct path? " + "(" + harddrive + ")" + " Y/N ")
     if option == "Y" or option == "y":
+        os.system(umountstring)
         os.system(formatstring)
-        option1 = input("The hard drive was formatted with the ext4 filesystem. Should it be mounted to /mnt? Y/N ")
-        if option1 == "Y" or option == "y":
-            mountstring = "mount " + harddrive + " /mnt"
-            os.system(mountstring)
-            print("Hard drive was mounted to /mnt.")
-            menu()
-        else:
-            menu()
+        mountstring = "mount " + harddrive + " /mnt"
+        os.system(mountstring)
+        print("Hard drive was mounted to /mnt.")
+        menu()
+
     else:
         harddriveformat()
 
-
-
+def chrootinstall():
+    hostnamestring = input("Enter the hostname that this device should have later: ")
+    hostnamestring = "echo " + hostnamestring + " > /etc/hostname"
+    os.system(hostnamestring)
+    os.system("cat /etc/hostname")
+    packagestring = "pacman -S "
 
 
 def harddrivelist():
@@ -110,6 +118,11 @@ def menu():
         menu()
     if int(option) == 4:
         exit()
+
+
+if sys.argv[1] == "chroot":
+    chrootinstall()
+    exit()
 
 
 
