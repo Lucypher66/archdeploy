@@ -69,9 +69,12 @@ def harddriveformat():
 def chrootinstall():
     hostnamestring = input("Enter the hostname that this device should have later: ")
     hostnamestring = "echo " + hostnamestring + " > /etc/hostname"
+    langstring = input("Enter your locale String (example: de_DE for germany): ")
+    langstringtopaste = langstring + ".UTF-8"
     os.system(hostnamestring)
-    os.system("cat /etc/hostname")
+    #os.system("cat /etc/hostname")
     packagestring = "pacman -S "
+
 
 
 def harddrivelist():
