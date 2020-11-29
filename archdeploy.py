@@ -1,7 +1,49 @@
 import os
 
 def systeminstallation():
+   chroot = ""
+
    print("FUNCTION NOT IMPLEMENTED")
+   harddrive = input("Type the device path of the hard drive (/dev/sdX): ")
+   hostnamestring = input("Enter the hostname that this device should have later: ")
+   mountstring = "mount " + harddrive + " /mnt"
+   os.system(mountstring)
+   pacstrapstring = "pacstrap /mnt linux linux-firmware dhcpcd nano bash-completion "
+
+
+   option = input("Install the base-devel package? Mandatory if you want to build your oen packages or use the AUR. Y/N: ")
+   if option == "Y" or option == "y":
+       pacstrapstring = pacstrapstring + "base-devel "
+   else:
+       pacstrapstring = pacstrapstring + "base"
+
+   option = input("Install Intel microcode? Y/N: ")
+   if option == "Y" or option == "y":
+       pacstrapstring = pacstrapstring + "intel-ucode "
+   else:
+       pass
+
+   option = input("Install AMD microcode? Y/N: ")
+   if option == "Y" or option == "y":
+       pacstrapstring = pacstrapstring + "amd-ucode "
+   else:
+       pass
+
+   os.system(pacstrapstring)
+   os.system("genfstab -Up /mnt > /mnt/etc/fstab")
+   os.system("cat /mnt/etc/fstab")
+
+
+   os.system("arch-chroot /mnt")
+
+   if int(chroot) == 1:
+    hostnamestring = "echo " + hostnamestring + " > /etc/hostname"
+    os.system(hostnamestring)
+    os.system("cat /etc/hostname")
+    packagestring = "pacman -S "
+
+
+
 
 def harddriveformat():
     harddrive = input("Type the device path of the hard drive (/dev/sdX): ")
@@ -71,7 +113,4 @@ def menu():
 
 
 
-def main():
-    menu()
-
-main()
+menu()
