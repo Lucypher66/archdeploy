@@ -1,1 +1,1 @@
-# archdeploy
+This is a python-based script, with which you can deploy an Arch Linux system without any specific distro such as anarchy or zen. You can use this script with any live ISO of arch linux. You can also define what to install or not, by setting any of the variables to one of the available values. This means that you need to edit the script once and then be able to deploy multiple machines with the same settings with one script.
