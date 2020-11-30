@@ -13,7 +13,7 @@ def systeminstallation():
    chroot = ""
 
    print("FUNCTION NOT IMPLEMENTED")
-   harddrive = input("Type the device path of the hard drive (/dev/sdX): ")
+   harddrive = input("Type the device path of the hard drive (/dev/sdXY): ")
    mountstring = "mount " + harddrive + " /mnt"
    os.system(mountstring)
    pacstrapstring = "pacstrap /mnt linux linux-firmware dhcpcd nano bash-completion python grub "
@@ -52,11 +52,11 @@ def systeminstallation():
 
 def harddriveformat():
     harddrive = input("Type the device path of the hard drive (/dev/sdX): ")
-    umountstring = "umount " + harddrive + " /mnt"
-    formatstring = "mkfs.ext4 " + harddrive
+    formatstring = "parted -s -a optimal " + harddrive + " mklabel msdos -- mkpart primary ext4 100%"
+
     option = input("Is this the correct path? " + "(" + harddrive + ")" + " Y/N ")
     if option == "Y" or option == "y":
-        os.system(umountstring)
+
         os.system(formatstring)
         mountstring = "mount " + harddrive + " /mnt"
         os.system(mountstring)
